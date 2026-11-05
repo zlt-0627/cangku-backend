@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chat.mapper.AddRoleMapper">
+    <select id="select" resultType="com.chat.pojo.dto.SelectRoleDto">
+        select id,username,role from login where is_delete=1 limit #{start},#{pageSize}
+    </select>
+
+
+    <update id="update">
+        update login
+        <set>
+            <if test="addRolePo.username != null">
+                username = #{addRolePo.username},
+            </if>
+            <if test="addRolePo.password != null">
+                password = #{addRolePo.password},
+            </if>
+            <if test="addRolePo.role != null">
+                role = #{addRolePo.role},
+            </if>
+            version = version + 1
+        </set>
+        where id = #{addRolePo.id} and version = #{version}
+    </update>
+
+
+</mapper>

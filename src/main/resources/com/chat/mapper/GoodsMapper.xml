@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chat.mapper.GoodsMapper">
+    <update id="updateGoods" >
+        update goods
+        <set>
+            <if test="goodsName != null">
+                goods_name = #{goodsName},
+            </if>
+            <if test="goodsCode != null">
+                goods_code = #{goodsCode},
+            </if>
+            <if test="unit != null">
+                unit = #{unit},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            update_time = now(),
+            version = version + 1
+        </set>
+        where goods_id = #{goodsId}
+        and version = #{version}
+        and is_delete = 0
+    </update>
+
+    <select id="selectLike" resultType="com.chat.pojo.po.GoodsPo">
+        select goods_id, goods_name, goods_code, unit, remark, update_time from goods
+        <where>
+            is_delete=0
+            <if test="goodsName!=null">
+                and goods_name like concat('%', #{goodsName}, '%')
+            </if>
+            <if test="createTime!=null">
+                and create_time=concat('%',#{createTime},'%')
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

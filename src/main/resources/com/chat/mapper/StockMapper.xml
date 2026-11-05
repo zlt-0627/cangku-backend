@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chat.mapper.StockMapper">
+    <update id="updateStock">
+        update stock
+        <set>
+            <if test="warehouseId!=null">
+                warehouse_id=#{warehouseId}
+            </if>
+            <if test="goodsId!=null">
+                ,goods_id=#{goodsId}
+            </if>
+            <if test="stockNum!=null">
+                ,stock_num=#{stockNum}
+            </if>
+            <if test="safeNum!=null">
+                ,safe_num=#{safeNum}
+            </if>
+            ,version=version+1
+            ,update_time=#{updateTime}
+
+        </set>
+        where stock_id=#{stockId}
+
+
+    </update>
+
+
+</mapper>
