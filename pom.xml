@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.chat</groupId>
-    <artifactId>canku</artifactId>
+    <artifactId>cangku</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>chanku</name>
     <description>chanku</description>
