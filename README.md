@@ -213,6 +213,12 @@ curl -H "token: 上一步返回的字符串" "http://localhost:8081/goods/select
 | --- | --- |
 | ![登录](docs/images/login.png) | ![库存](docs/images/stock.png) |
 
+接口调用与缓存效果：
+
+![接口返回](docs/images/api.png)
+
+![Redis 缓存](docs/images/redis.png)
+
 ---
 
 ## License
