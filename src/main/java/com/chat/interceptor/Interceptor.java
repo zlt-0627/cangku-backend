@@ -23,9 +23,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class Interceptor implements HandlerInterceptor {
 
-    /** 窗口长度：20 秒（key 的过期时间） */
+    /* 窗口长度：20 秒（key 的过期时间） */
     private static final long WINDOW_SECONDS = 20L;
-    /** 窗口内最多允许多少次，超过就拦截 */
+    /* 窗口内最多允许多少次，超过就拦截 */
     private static final long LIMIT = 20L;
 
     @Autowired
@@ -75,12 +75,10 @@ public class Interceptor implements HandlerInterceptor {
         return true;
     }
 
-    /**
+    /*
      * 用 Redis 的 INCR 计数：key 是「rate:req:IP」，每次请求 +1。
-     * <p>
      * 第一次访问（返回值等于 1）时才给它设 20 秒过期，之后这个 key 在 20 秒内一直累加，
      * 到点自动删除、计数从 0 重来。计数超过 LIMIT 就拒绝。
-     * <p>
      * 为什么只在 count == 1 时设过期：如果每次都 expire，窗口会被不断续命，
      * 只要请求不停就永远不过期，那就不叫 "20 秒" 了。
      */
@@ -115,14 +113,14 @@ public class Interceptor implements HandlerInterceptor {
         }
     }
 
-    /** 统一把 Result 写成 JSON 响应（以前这里用的是 fastjson2，现在统一成 Jackson） */
+    /* 统一把 Result 写成 JSON 响应（以前这里用的是 fastjson2，现在统一成 Jackson） */
     private void writeJson(HttpServletResponse response, int status, Result result) throws Exception {
         response.setStatus(status);
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(result));
     }
 
-    /** 取真实客户端 IP：经过 Nginx 之类的代理时 remoteAddr 会是代理的地址，所以先看 X-Forwarded-For */
+    /* 取真实客户端 IP：经过 Nginx 之类的代理时 remoteAddr 会是代理的地址，所以先看 X-Forwarded-For */
     private String clientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
         if (ip != null && !ip.isBlank()) {
@@ -137,7 +135,7 @@ public class Interceptor implements HandlerInterceptor {
         return request.getRemoteAddr();
     }
 
-    /** 静态资源不占额度，否则打开一次页面就把额度用完了 */
+    /* 静态资源不占额度，否则打开一次页面就把额度用完了 */
     private boolean isStatic(HttpServletRequest request) {
         String uri = request.getRequestURI();
         return uri.startsWith("/static")
