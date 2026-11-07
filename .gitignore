@@ -37,3 +37,7 @@ build/
 .env.local
 *.log
 
+
+desktop.ini
+Thumbs.db
+
