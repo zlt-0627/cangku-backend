@@ -85,3 +85,16 @@ SELECT '仓库' AS 表, COUNT(*) AS 条数 FROM warehouse
 UNION ALL SELECT '商品', COUNT(*) FROM goods
 UNION ALL SELECT '库存', COUNT(*) FROM stock
 UNION ALL SELECT '流水', COUNT(*) FROM stock_record;
+
+-- ---------- 登录账号 ----------
+-- 密码明文分别是 admin / 123456（BCrypt 加密后入库）
+-- 已有同名账号时会跳过，不会覆盖你自己建的账号
+INSERT INTO login (username, password, role, is_delete, version)
+SELECT 'admin', '$2a$10$Vk1Ra6osYumypVKw7/AYte5LlEE78XNIMVS9rWQg2/FcFuzDQXWgi', 4, 1, 0 FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM login WHERE username = 'admin');
+
+INSERT INTO login (username, password, role, is_delete, version)
+SELECT 'operator', '$2a$10$Vk1Ra6osYumypVKw7/AYte5LlEE78XNIMVS9rWQg2/FcFuzDQXWgi', 2, 1, 0 FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM login WHERE username = 'operator');
+
+-- 说明：本项目的 is_delete 约定与常规相反 —— 1 = 有效，0 = 已删除
