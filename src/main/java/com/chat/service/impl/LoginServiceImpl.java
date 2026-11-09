@@ -29,17 +29,6 @@ public class LoginServiceImpl implements LoginService {
     //在这里面做业务操作,登入的操作
     public String login(LoginDto loginDto){
           LoginPo loginPo=new LoginPo();
-//        //模拟插入操作
-//        String username="朱浪涛";
-//        String password="zlt200627";
-//        Integer role=4;
-//       String encopassword= passwordEncoder.encode(password);
-//
-//        loginPo.setUsername(username);
-//        loginPo.setPassword(encopassword);
-//        loginPo.setRole(role);
-//        userMapper.insert(loginPo);
-
 
         //不可以直接用dto的数据给数据库，不安全，这里要给密码加密，不可以传密码去匹配
 
