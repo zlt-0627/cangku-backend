@@ -5,7 +5,7 @@ import com.chat.pojo.vo.RoleVo;
 
 
 
-public interface WareHuoseService {
+public interface WareHouseService {
 
     //增加仓库
     public void addWare(WareDto wareDto,Integer role);

@@ -1,13 +1,13 @@
 package com.chat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.chat.exception.OwerException;
+import com.chat.exception.BizException;
 import com.chat.mapper.WareHouseMapper;
 import com.chat.pojo.dto.WareDto;
 import com.chat.pojo.po.WarePo;
 import com.chat.pojo.vo.RoleVo;
-import com.chat.service.WareHuoseService;
-import com.chat.until.CacheHelper;
+import com.chat.service.WareHouseService;
+import com.chat.util.CacheHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.List;
 //仓库的业务操作
 @Service
 @Slf4j
-public class WareHouseServiceImpl implements WareHuoseService {
+public class WareHouseServiceImpl implements WareHouseService {
     @Autowired
     private WareHouseMapper wareHouseMapper;
 
@@ -35,7 +35,7 @@ public class WareHouseServiceImpl implements WareHuoseService {
     public void addWare(WareDto wareDto, Integer role) {
         //身份校验
         if(role==1){
-            throw new OwerException("权限不足!");
+            throw new BizException("权限不足!");
         }
         //满足权限的时候，看看该仓库是否存在
         //查询
@@ -60,7 +60,7 @@ public class WareHouseServiceImpl implements WareHuoseService {
         //没有查到,为了防止没有查到高并发的情况下，这里写一个间隙锁
         Integer i = wareHouseMapper.addWare(wareDto);
         if(i!=1){
-            throw new OwerException("改商品已被添加！");
+            throw new BizException("改商品已被添加！");
 
         }
         //新增成功，仓库列表缓存作废
@@ -109,7 +109,7 @@ public class WareHouseServiceImpl implements WareHuoseService {
         //把数据改了
         Integer i = wareHouseMapper.updateWare(warePo);
         if(i!=1){
-            throw new OwerException("该数据已被更改！");
+            throw new BizException("该数据已被更改！");
         }
         //改完了，缓存里的旧数据删掉
         cache.evict("cache:ware:");
@@ -121,7 +121,7 @@ public class WareHouseServiceImpl implements WareHuoseService {
     @Override
     public void deleteWare(Integer id, Integer role) {
         if(role==1){
-            throw new OwerException("没有权限！");
+            throw new BizException("没有权限！");
         }
         //查询这个数据是否存在。
         WarePo warePo = wareHouseMapper.selectId(id);
@@ -133,7 +133,7 @@ public class WareHouseServiceImpl implements WareHuoseService {
 
         Integer i = wareHouseMapper.deleteWare(id, warePo.getVersion());
         if(i==0){
-            throw new OwerException("该数据被删除了！");
+            throw new BizException("该数据被删除了！");
         }
         //逻辑删除了，缓存里可能还留着它
         cache.evict("cache:ware:");

@@ -60,7 +60,7 @@ public class GoodsController {
     }
 
     //删除商品信息（逻辑删除）
-    @DeleteMapping("/deletedoods")
+    @DeleteMapping("/deletegoods")
     //通过id删除，只要把商品id传入
     public Result deleteGoods(@RequestParam Integer goodsId,HttpServletRequest request){
         Integer role=(Integer) request.getAttribute("role");

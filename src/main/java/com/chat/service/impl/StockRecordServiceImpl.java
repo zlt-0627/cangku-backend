@@ -5,7 +5,7 @@ import com.chat.mapper.StockRecordMapper;
 import com.chat.pojo.po.StockRecordPo;
 import com.chat.pojo.vo.RoleVo;
 import com.chat.service.StockRecordService;
-import com.chat.until.CacheHelper;
+import com.chat.util.CacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

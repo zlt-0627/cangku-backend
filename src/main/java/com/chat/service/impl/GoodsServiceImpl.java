@@ -1,14 +1,14 @@
 package com.chat.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.chat.exception.OwerException;
+import com.chat.exception.BizException;
 import com.chat.mapper.GoodsMapper;
 import com.chat.pojo.dto.GoodsDto;
 import com.chat.pojo.dto.PageDto;
 import com.chat.pojo.po.GoodsPo;
 import com.chat.pojo.vo.RoleVo;
 import com.chat.service.GoodsService;
-import com.chat.until.CacheHelper;
+import com.chat.util.CacheHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,12 +104,12 @@ public class GoodsServiceImpl implements GoodsService {
     public void updateGoods(GoodsDto goodsDto, Integer role) {
         //这里直接把数据传进去，没有要保护的数据
         if(role==1){
-            throw new OwerException("权限不足!");
+            throw new BizException("权限不足!");
         }
         //判断商品是否存在
         GoodsDto goodsDto1 = goodsMapper.selectById(goodsDto);
         if(goodsDto1==null){
-            throw new OwerException("商品不存在！");
+            throw new BizException("商品不存在！");
         }
         Integer version = goodsDto1.getVersion();
         goodsDto.setVersion(version);
@@ -132,12 +132,12 @@ public class GoodsServiceImpl implements GoodsService {
     public void deleteGoods(Integer goodsId, Integer role) {
         //判断权限是否合理
         if(role==1){
-            throw new OwerException("权限不足！");
+            throw new BizException("权限不足！");
         }
         //先查询是否存在该用户在删除
         GoodsDto goodsDto = goodsMapper.selectId(goodsId);
         if(goodsDto==null){
-            throw new OwerException("商品不存在！");
+            throw new BizException("商品不存在！");
         }
 //        try{
 //            Thread.sleep(10000);

@@ -4,7 +4,7 @@ package com.chat.controller;
 import com.chat.pojo.Result;
 import com.chat.pojo.dto.WareDto;
 import com.chat.pojo.vo.RoleVo;
-import com.chat.service.WareHuoseService;
+import com.chat.service.WareHouseService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.HttpRequestHandler;
@@ -18,7 +18,7 @@ import java.net.http.HttpRequest;
 //这个仓库管理是单一的对仓库进行操作
 public class WareHouseController {
     @Autowired
-    private WareHuoseService wareHuoseService;
+    private WareHouseService wareHouseService;
 
 
     public static Integer getrole(HttpServletRequest request){
@@ -33,7 +33,7 @@ public class WareHouseController {
     public Result addWare(@RequestBody WareDto wareDto, HttpServletRequest request){
         //得到这个role
         Integer role =(Integer) request.getAttribute("role");
-        wareHuoseService.addWare(wareDto,role);
+        wareHouseService.addWare(wareDto,role);
         return Result.success();
     }
 
@@ -43,7 +43,7 @@ public class WareHouseController {
     @GetMapping("/selectware")
     public Result selectWare(@RequestParam(defaultValue = "5") Integer pageSize,@RequestParam(defaultValue = "1") Integer page){
 
-        RoleVo roleVo = wareHuoseService.selectWare(page, pageSize);
+        RoleVo roleVo = wareHouseService.selectWare(page, pageSize);
         return Result.success(roleVo);
     }
 
@@ -53,7 +53,7 @@ public class WareHouseController {
     @PutMapping("/updateware")
     public Result updateWare(@RequestBody WareDto wareDto,HttpServletRequest request){
         Integer getrole = getrole(request);
-        wareHuoseService.updateWare(wareDto,getrole);
+        wareHouseService.updateWare(wareDto,getrole);
         return Result.success();
     }
 
@@ -63,7 +63,7 @@ public class WareHouseController {
     //通过id来删除仓库的数据
     public Result deleteWare(@RequestParam Integer id,HttpServletRequest request){
         Integer getrole = getrole(request);
-        wareHuoseService.deleteWare(id,getrole);
+        wareHouseService.deleteWare(id,getrole);
         return Result.success();
 
     }

@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @Service
-public class AddRoleSeerviceImpl implements AddPeopleService {
+public class AddRoleServiceImpl implements AddPeopleService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;

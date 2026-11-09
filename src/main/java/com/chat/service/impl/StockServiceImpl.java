@@ -2,7 +2,7 @@ package com.chat.service.impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import com.chat.exception.OwerException;
+import com.chat.exception.BizException;
 import com.chat.mapper.GoodsMapper;
 import com.chat.mapper.StockMapper;
 import com.chat.mapper.StockRecordMapper;
@@ -15,7 +15,7 @@ import com.chat.pojo.po.WarePo;
 import com.chat.pojo.vo.RoleVo;
 import com.chat.pojo.vo.StockRecordVo;
 import com.chat.service.StockService;
-import com.chat.until.CacheHelper;
+import com.chat.util.CacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,11 +87,11 @@ public class StockServiceImpl implements StockService {
         //查看是否存在该库存
         StockPo stockPo = stockMapper.selectId(id);
         if(stockPo==null){
-            throw new OwerException("该库存不存在!");
+            throw new BizException("该库存不存在!");
         }
         Integer version = stockPo.getVersion();
         if(stockPo.getStockNum()+num>stockPo.getSafeNum()){
-            throw new OwerException("超出安全值，请到其他仓库存！");
+            throw new BizException("超出安全值，请到其他仓库存！");
         }
 
         if(stockPo.getStockNum()+num<0){

@@ -1,4 +1,4 @@
-package com.chat.until;
+package com.chat.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

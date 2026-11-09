@@ -1,12 +1,12 @@
 package com.chat.service.impl;
 
 
-import com.chat.exception.OwerException;
+import com.chat.exception.BizException;
 import com.chat.mapper.UserMapper;
 import com.chat.pojo.dto.LoginDto;
 import com.chat.pojo.po.LoginPo;
 import com.chat.service.LoginService;
-import com.chat.until.Jwt;
+import com.chat.util.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,11 +52,11 @@ public class LoginServiceImpl implements LoginService {
         // 前端拿到的是 500 + 一段 Java 异常信息。这里统一成"账号或密码错误"，
         // 顺便也避免通过报错差异被人枚举出哪些用户名是存在的。
         if (loginPo1 == null) {
-            throw new OwerException("账号或密码错误");
+            throw new BizException("账号或密码错误");
         }
         boolean e=passwordEncoder.matches(loginDto.getPassword(),loginPo1.getPassword());
         if(!e){
-            throw new OwerException("账号或密码错误");
+            throw new BizException("账号或密码错误");
         }
         //密码正确给一个jwt令牌,把id和role给jwt.
         Map<String, Object> map=new HashMap();

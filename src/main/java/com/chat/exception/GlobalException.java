@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalException {
 
     /** 业务异常：消息本来就是写给人看的（"商品已经存在"这种），原样返回 */
-    @ExceptionHandler(OwerException.class)
-    public Result ownException(OwerException e) {
+    @ExceptionHandler(BizException.class)
+    public Result ownException(BizException e) {
         log.warn("业务异常：{}", e.getMsg());
         return Result.error(e.getMsg());
     }

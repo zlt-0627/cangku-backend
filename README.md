@@ -57,7 +57,7 @@ flowchart LR
 ```
 chanku
 ├── src/main/java/com/chat
-│   ├── ChankuApplication.java    启动类
+│   ├── CangkuApplication.java    启动类
 │   ├── controller/               5 个模块的接口
 │   ├── service/                  业务接口
 │   │   └── impl/                 业务实现（事务、权限、缓存）
@@ -70,7 +70,7 @@ chanku
 │   ├── config/                   拦截器注册、密码加密器
 │   ├── interceptor/              登录校验 + 限流
 │   ├── exception/                业务异常 + 全局异常处理
-│   └── until/                    JWT、缓存工具
+│   └── util/                     JWT、缓存工具
 └── src/main/resources
     ├── application.yaml          配置（密码等从环境变量读取）
     └── com/chat/mapper/*.xml     SQL 映射文件

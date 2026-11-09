@@ -2,7 +2,7 @@ package com.chat.interceptor;
 //这里使用拦截器，不使用过滤器，这个拦截器是spring原生的，不用使用severlet
 
 import com.chat.pojo.Result;
-import com.chat.until.Jwt;
+import com.chat.util.Jwt;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
