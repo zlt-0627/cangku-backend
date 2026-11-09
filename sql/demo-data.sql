@@ -90,7 +90,7 @@ UNION ALL SELECT '流水', COUNT(*) FROM stock_record;
 -- 密码明文分别是 admin / 123456（BCrypt 加密后入库）
 -- 已有同名账号时会跳过，不会覆盖你自己建的账号
 INSERT INTO login (username, password, role, is_delete, version)
-SELECT 'admin', '$2a$10$Vk1Ra6osYumypVKw7/AYte5LlEE78XNIMVS9rWQg2/FcFuzDQXWgi', 4, 1, 0 FROM DUAL
+SELECT 'admin', '$2a$10$Vk1Ra6osYumypVKw7/AYte5LlEE78XNIMVS9rWQg2/FcFuzDQXWgi', 3, 1, 0 FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM login WHERE username = 'admin');
 
 INSERT INTO login (username, password, role, is_delete, version)

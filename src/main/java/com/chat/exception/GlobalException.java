@@ -8,7 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/**
+/*
  * 全局异常处理。
  * <p>
  * 改造点：
@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalException {
 
-    /** 业务异常：消息本来就是写给人看的（"商品已经存在"这种），原样返回 */
+    /* 业务异常：消息本来就是写给人看的（"商品已经存在"这种），原样返回 */
     @ExceptionHandler(BizException.class)
     public Result ownException(BizException e) {
         log.warn("业务异常：{}", e.getMsg());
         return Result.error(e.getMsg());
     }
 
-    /** 参数校验失败（@Valid 抛出来的），把第一个字段的错误提示返回给前端 */
+    /* 参数校验失败（@Valid 抛出来的），把第一个字段的错误提示返回给前端 */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result validException(MethodArgumentNotValidException e) {
         FieldError fieldError = e.getBindingResult().getFieldError();
@@ -38,7 +38,7 @@ public class GlobalException {
         return Result.error(msg);
     }
 
-    /** 其它运行时异常 */
+    /* 其它运行时异常 */
     @ExceptionHandler(RuntimeException.class)
     public Result runningException(RuntimeException e) {
         // 完整堆栈进日志，方便排查；前端只拿一句话
