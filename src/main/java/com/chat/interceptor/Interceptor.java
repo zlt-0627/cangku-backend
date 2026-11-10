@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,10 +24,17 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class Interceptor implements HandlerInterceptor {
 
-    /* 窗口长度：20 秒（key 的过期时间） */
-    private static final long WINDOW_SECONDS = 20L;
+    /* 窗口长度：默认 20 秒（可在 application.yaml 的 rate-limit 段覆盖） */
+    @Value("${rate-limit.window-seconds:20}")
+    private long windowSeconds;
+
     /* 窗口内最多允许多少次，超过就拦截 */
-    private static final long LIMIT = 20L;
+    @Value("${rate-limit.limit:20}")
+    private long limit;
+
+    /* 限流总开关：压测或排障时可以整体关掉 */
+    @Value("${rate-limit.enabled:true}")
+    private boolean rateLimitEnabled;
 
     @Autowired
     private StringRedisTemplate redis;
@@ -83,6 +91,10 @@ public class Interceptor implements HandlerInterceptor {
      * 只要请求不停就永远不过期，那就不叫 "20 秒" 了。
      */
     private boolean allowRequest(String ip, HttpServletResponse response) {
+        // 开关关掉就完全不限流（压测、排障时用）
+        if (!rateLimitEnabled) {
+            return true;
+        }
         String key = "rate:req:" + ip;
         try {
             Long count = redis.opsForValue().increment(key);
@@ -90,19 +102,19 @@ public class Interceptor implements HandlerInterceptor {
                 return true;                 // 理论上不会走到，保险起见放行
             }
             if (count == 1L) {
-                redis.expire(key, Duration.ofSeconds(WINDOW_SECONDS));
+                redis.expire(key, Duration.ofSeconds(windowSeconds));
             }
-            if (count > LIMIT) {
+            if (count > limit) {
                 // 兜底：万一 INCR 成功了、EXPIRE 还没执行（比如进程正好在这一瞬间挂了），
                 // key 会永不过期，那这个 IP 就被永久封死了。这里顺手补一次过期时间。
                 Long ttl = redis.getExpire(key, TimeUnit.SECONDS);
                 if (ttl == null || ttl < 0) {
-                    redis.expire(key, Duration.ofSeconds(WINDOW_SECONDS));
-                    ttl = WINDOW_SECONDS;
+                    redis.expire(key, Duration.ofSeconds(windowSeconds));
+                    ttl = windowSeconds;
                 }
                 response.setHeader("Retry-After", String.valueOf(Math.max(ttl, 1)));
                 writeJson(response, 429,
-                        Result.error("请求过于频繁，" + WINDOW_SECONDS + " 秒内最多 " + LIMIT + " 次，请稍后再试"));
+                        Result.error("请求过于频繁，" + windowSeconds + " 秒内最多 " + limit + " 次，请稍后再试"));
                 return false;
             }
             return true;

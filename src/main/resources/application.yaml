@@ -36,6 +36,13 @@ jwt:
   secret: ${JWT_SECRET:chanku-dev-secret-key-change-me-0123456789}
   expire-minutes: ${JWT_EXPIRE_MINUTES:30}
 
+# 接口限流：默认单 IP 20 秒内最多 20 次
+# 压测或排障时把 enabled 改成 false，就不用改代码
+rate-limit:
+  enabled: ${RATE_LIMIT_ENABLED:true}
+  window-seconds: 20
+  limit: 20
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
