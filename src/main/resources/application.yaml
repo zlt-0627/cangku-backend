@@ -20,6 +20,9 @@ spring:
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:}
       database: 0
+      # 连接和命令都限 300ms：Redis 挂了要快速失败，不能把请求线程卡住
+      timeout: 300ms
+      connect-timeout: 300ms
       lettuce:
         pool:
           max-active: 8
