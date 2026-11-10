@@ -33,8 +33,8 @@ public interface StockMapper {
 
     public Integer updateStock(StockPo stockPo);
 
-    //分页查询
-    @Select("select count(*) from goods")
+    //分页查询总数（注意是 stock 不是 goods——之前写错表，导致总数算成商品数）
+    @Select("select count(*) from stock")
     public Integer selectCount();
 
     @Select("select stock_id, warehouse_name, goods_name, stock_num, safe_num from stock,warehouse,goods where goods.goods_id=stock.goods_id and stock.warehouse_id=warehouse.warehouse_id limit #{start},#{pageSize}")
