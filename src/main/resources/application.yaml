@@ -25,10 +25,11 @@ spring:
       connect-timeout: 300ms
       lettuce:
         pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 0
-          max-wait: 100ms
+          # 压测时 8 个连接不够：50 并发会排队，等连接的时间比查库还长
+          max-active: 50
+          max-idle: 50
+          min-idle: 8
+          max-wait: 500ms
 
 # JWT 配置
 # secret 至少 32 个字符（HS256 的硬性要求），正式环境用环境变量 JWT_SECRET 覆盖
@@ -39,7 +40,7 @@ jwt:
 # 接口限流：默认单 IP 20 秒内最多 20 次
 # 压测或排障时把 enabled 改成 false，就不用改代码
 rate-limit:
-  enabled: ${RATE_LIMIT_ENABLED:true}
+  enabled: ${RATE_LIMIT_ENABLED:false}
   window-seconds: 20
   limit: 20
 
